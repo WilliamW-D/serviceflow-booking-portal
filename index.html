@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ServiceFlow — High-Converting Service Business Booking & Deposit Portal</title>
+  <meta name="description" content="Production-ready client booking, calendar scheduling, and Stripe deposit collection system with business owner CRM and ECC automation harness.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="app-header">
+    <div class="brand-wrapper" onclick="switchTab('booking')">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">ServiceFlow</div>
+        <div style="font-size: 0.72rem; color: var(--text-dim);">Apex Client & Deposit Portal</div>
+      </div>
+      <span class="brand-badge">ECC Certified</span>
+    </div>
+
+    <!-- Mode Tabs -->
+    <nav class="nav-tabs" aria-label="Portal Navigation">
+      <button class="nav-tab-btn active" data-view="booking" id="nav-btn-booking">
+        <span>📱</span> Client Booking Flow
+      </button>
+      <button class="nav-tab-btn" data-view="admin" id="nav-btn-admin">
+        <span>💼</span> Owner CRM & Calendar
+      </button>
+      <button class="nav-tab-btn" data-view="pitch" id="nav-btn-pitch">
+        <span>💰</span> Sales & Pitch Kit
+      </button>
+      <button class="nav-tab-btn" data-view="ecc" id="nav-btn-ecc">
+        <span>🧪</span> ECC Automation
+      </button>
+    </nav>
+
+    <!-- Quick Utilities -->
+    <div class="nav-actions">
+      <button class="btn-secondary-sm" id="btn-reset-data" title="Reset sample bookings to initial demo state">
+        ↺ Reset Demo Data
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- ====================================================================
+         VIEW 1: CLIENT BOOKING EXPERIENCE
+         ==================================================================== -->
+    <section class="view-section active" id="view-booking">
+      
+      <!-- Stepper Indicator -->
+      <nav class="stepper-header" aria-label="Booking Progress">
+        <div class="step-node active" data-step="1" onclick="setBookingStep(1)">
+          <div class="step-bubble">1</div>
+          <span>Select Package</span>
+        </div>
+        <div class="step-node" data-step="2" onclick="setBookingStep(2)">
+          <div class="step-bubble">2</div>
+          <span>Choose Date & Time</span>
+        </div>
+        <div class="step-node" data-step="3" onclick="setBookingStep(3)">
+          <div class="step-bubble">3</div>
+          <span>Your Details</span>
+        </div>
+        <div class="step-node" data-step="4">
+          <div class="step-bubble">4</div>
+          <span>Confirmed</span>
+        </div>
+      </nav>
+
+      <!-- STEP 1: SELECT PACKAGE -->
+      <div class="booking-step-content" id="step-content-1">
+        <div class="hero-banner">
+          <div class="hero-pill">✨ Instant Online Scheduling & Deposit Security</div>
+          <h1 class="hero-title">Book Premium Auto Care & Detailing</h1>
+          <p class="hero-subtitle">Choose your service package below. Lock in your appointment with a 20% deposit and pay the remaining balance upon inspection.</p>
+        </div>
+
+        <div class="packages-grid" id="packages-container">
+          <!-- Dynamically populated via app.js -->
+        </div>
+      </div>
+
+      <!-- STEP 2: DATE & TIME SELECTION -->
+      <div class="booking-step-content" id="step-content-2" style="display: none;">
+        <div class="hero-banner" style="margin-bottom: 2rem;">
+          <h2 class="hero-title" style="font-size: 2.2rem;">Select Appointment Slot</h2>
+          <p class="hero-subtitle">Pick an open date on our live schedule and choose your preferred morning or afternoon slot.</p>
+        </div>
+
+        <div class="booking-calendar-wrapper">
+          <!-- Calendar Card -->
+          <div class="glass-panel calendar-card">
+            <div class="calendar-month-bar">
+              <span class="calendar-month-title">October 2026</span>
+              <div style="display: flex; gap: 0.35rem;">
+                <button class="calendar-nav-btn" disabled>‹</button>
+                <button class="calendar-nav-btn">›</button>
+              </div>
+            </div>
+
+            <div class="calendar-days-header">
+              <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+
+            <div class="calendar-grid" id="calendar-days-grid">
+              <!-- Dynamically populated via app.js -->
+            </div>
+            <div style="margin-top: 1.25rem; font-size: 0.8rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.5rem;">
+              <span style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%; display: inline-block;"></span>
+              Selected Date is dynamically protected against double-bookings.
+            </div>
+          </div>
+
+          <!-- Timeslots Card & Addons -->
+          <div class="glass-panel timeslots-card">
+            <h3 style="font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 0.3rem;">Available Start Times</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Average duration: 2.5 hours</p>
+
+            <div class="slots-grid" id="timeslots-list">
+              <!-- Dynamically populated via app.js -->
+            </div>
+
+            <hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 1.5rem 0;">
+
+            <h4 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 0.75rem;">Recommended Add-Ons</h4>
+            <div id="addons-selection-list">
+              <!-- Dynamically populated via app.js -->
+            </div>
+
+            <!-- Sticky Order Summary -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem; margin-top: 1.25rem;">
+              <div class="summary-row">
+                <span>Selected Slot:</span>
+                <strong id="summary-selected-slot" style="color: var(--accent-cyan);">2026-10-17 @ 10:00 AM</strong>
+              </div>
+              <div class="summary-row">
+                <span>Total Service Price:</span>
+                <span id="summary-total-price" style="font-weight: 700; color: #fff;">$249.00</span>
+              </div>
+              <div class="summary-row deposit-highlight">
+                <span>20% Deposit Due Today:</span>
+                <span id="summary-deposit-price">$49.80</span>
+              </div>
+              <div class="summary-row" style="font-size: 0.8rem; color: var(--text-dim);">
+                <span>Balance Due on Completion:</span>
+                <span id="summary-balance-price">$199.20</span>
+              </div>
+            </div>
+
+            <button class="btn-primary-block" id="btn-proceed-to-customer" style="margin-top: 1.5rem;">
+              Continue to Customer Details →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: CUSTOMER DETAILS FORM -->
+      <div class="booking-step-content" id="step-content-3" style="display: none;">
+        <div style="max-width: 680px; margin: 0 auto;">
+          <div class="hero-banner" style="margin-bottom: 2rem;">
+            <h2 class="hero-title" style="font-size: 2.2rem;">Where Should We Meet You?</h2>
+            <p class="hero-subtitle">Provide your contact info and vehicle location so our mobile crew arrives fully prepared.</p>
+          </div>
+
+          <div class="glass-panel" style="padding: 2.5rem;">
+            <div class="customer-form-grid">
+              <div class="form-group">
+                <label class="form-label" for="input-name">Full Name *</label>
+                <input type="text" id="input-name" class="form-input" placeholder="e.g. Alex Morgan" value="Alex Morgan">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="input-phone">Cell Phone (for SMS updates) *</label>
+                <input type="tel" id="input-phone" class="form-input" placeholder="(555) 000-0000" value="(555) 839-2041">
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="input-email">Email Address (for receipt & calendar invite) *</label>
+                <input type="email" id="input-email" class="form-input" placeholder="alex@example.com" value="alex.morgan@example.com">
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="input-vehicle">Vehicle Year, Make & Model *</label>
+                <input type="text" id="input-vehicle" class="form-input" placeholder="e.g. 2023 Audi Q5 (Dark Blue)" value="2023 Audi Q5">
+              </div>
+
+              <div class="form-group full-width">
+                <label class="form-label" for="input-notes">Special Instructions / Gate Code (Optional)</label>
+                <textarea id="input-notes" class="form-input" rows="2" placeholder="e.g. Park in visitor parking, water spigot is on left side of driveway..."></textarea>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+              <button class="btn-secondary-sm" onclick="setBookingStep(2)" style="padding: 0.9rem 1.5rem; font-size: 0.95rem;">
+                ← Back
+              </button>
+              <button class="btn-primary-block" id="btn-proceed-to-checkout" style="flex-grow: 1;">
+                Review & Pay Deposit with Card →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 4: CONFIRMATION RECEIPT -->
+      <div class="booking-step-content" id="step-content-4" style="display: none;">
+        <div style="max-width: 640px; margin: 0 auto;">
+          <div class="glass-panel confirmation-box">
+            <div class="success-check-circle">✓</div>
+            <h2 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem;">
+              Appointment Confirmed!
+            </h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+              Booking Reference: <strong id="confirm-ref-code" style="color: var(--accent-cyan); font-family: monospace;">APX-0000</strong>
+            </p>
+
+            <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.5rem; text-align: left; margin-bottom: 1.5rem;">
+              <div class="summary-row">
+                <span>Customer:</span>
+                <strong id="confirm-cust-name" style="color: #fff;">Alex Morgan</strong>
+              </div>
+              <div class="summary-row">
+                <span>Service:</span>
+                <strong id="confirm-service-name" style="color: var(--primary-light);">Signature Deep Detail</strong>
+              </div>
+              <div class="summary-row">
+                <span>Date & Time:</span>
+                <strong id="confirm-datetime" style="color: #fff;">2026-10-17 at 10:00 AM</strong>
+              </div>
+              <div class="summary-row">
+                <span>20% Deposit Paid:</span>
+                <strong id="confirm-deposit-paid" style="color: var(--accent-emerald);">$49.80 (Credit Card)</strong>
+              </div>
+              <div class="summary-row">
+                <span>Remaining Balance Due on Job:</span>
+                <strong id="confirm-balance-due" style="color: var(--text-muted);">$199.20</strong>
+              </div>
+            </div>
+
+            <!-- SMS Simulation Preview -->
+            <div style="background: rgba(99, 102, 241, 0.08); border: 1px solid var(--border-accent); border-radius: var(--radius-md); padding: 1rem 1.25rem; text-align: left; margin-bottom: 2rem;">
+              <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--primary-light); font-weight: 700; margin-bottom: 0.35rem;">
+                📱 Automated SMS Notification Dispatched
+              </div>
+              <div id="confirm-sms-preview" style="font-size: 0.85rem; color: #cbd5e1; font-style: italic;">
+                "Hi Alex! Your Signature Deep Detail is locked for Oct 17 @ 10:00 AM. $49.80 deposit received."
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+              <button class="btn-primary-block" onclick="switchTab('admin')">
+                View in Business Owner CRM →
+              </button>
+              <button class="btn-secondary-sm" onclick="setBookingStep(1)" style="padding: 0.8rem 1.25rem;">
+                Book Another Service
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         VIEW 2: BUSINESS OWNER ADMIN & CRM
+         ==================================================================== -->
+    <section class="view-section" id="view-admin">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <h2 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800;">
+            Operations & Revenue Hub
+          </h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Real-time schedule, deposit tracking, and customer contact manager.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn-secondary-sm" onclick="switchTab('booking')">
+            + Client Booking View
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Metrics -->
+      <div class="admin-metrics-row">
+        <div class="glass-panel metric-card">
+          <div class="metric-label">Gross Bookings</div>
+          <div class="metric-value" id="metric-gross-revenue">$0.00</div>
+          <div class="metric-trend">↑ 100% Locked with Deposits</div>
+        </div>
+        <div class="glass-panel metric-card">
+          <div class="metric-label">Deposits Collected</div>
+          <div class="metric-value" id="metric-deposits-collected" style="color: var(--accent-emerald);">$0.00</div>
+          <div class="metric-trend">Cash in Stripe Account</div>
+        </div>
+        <div class="glass-panel metric-card">
+          <div class="metric-label">Confirmed Jobs</div>
+          <div class="metric-value" id="metric-active-jobs">0</div>
+          <div class="metric-trend" style="color: var(--primary-light);">Upcoming on Schedule</div>
+        </div>
+        <div class="glass-panel metric-card">
+          <div class="metric-label">Completed Jobs</div>
+          <div class="metric-value" id="metric-completed-jobs">0</div>
+          <div class="metric-trend" style="color: var(--accent-cyan);">Balances Collected</div>
+        </div>
+      </div>
+
+      <!-- Bookings Table Panel -->
+      <div class="glass-panel" style="padding: 1.75rem;">
+        <div class="admin-table-controls">
+          <div class="table-filter-pills">
+            <button class="filter-pill active" data-filter="all">All Bookings</button>
+            <button class="filter-pill" data-filter="confirmed">Confirmed</button>
+            <button class="filter-pill" data-filter="completed">Completed</button>
+            <button class="filter-pill" data-filter="cancelled">Cancelled</button>
+          </div>
+
+          <div style="position: relative; min-width: 260px;">
+            <input type="text" id="admin-search-input" class="form-input" placeholder="Search by name, phone, or code..." style="padding: 0.55rem 0.95rem; font-size: 0.85rem; width: 100%;">
+          </div>
+        </div>
+
+        <div class="data-table-wrapper">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Booking ID</th>
+                <th>Client Info</th>
+                <th>Service & Vehicle</th>
+                <th>Date & Time</th>
+                <th>Payment Breakdown</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-bookings-tbody">
+              <!-- Dynamically populated via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 3: SALES PITCH & MONETIZATION KIT
+         ==================================================================== -->
+    <section class="view-section" id="view-pitch">
+      <div class="hero-banner" style="margin-bottom: 2.5rem;">
+        <div class="hero-pill" style="background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.4); color: var(--primary-light);">
+          💼 Freelance & Client Monetization Blueprint
+        </div>
+        <h2 class="hero-title" style="font-size: 2.4rem;">How to Turn This System Into Paying Clients</h2>
+        <p class="hero-subtitle">
+          Small service businesses lose thousands of dollars each month from phone tag and no-show customers. Use this interactive calculator and proven outreach scripts to close $750–$1,500 deals.
+        </p>
+      </div>
+
+      <div class="pitch-container">
+        <!-- Interactive ROI Calculator -->
+        <div class="glass-panel roi-calculator-box">
+          <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">
+            📊 Live Client ROI Demonstration
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.75rem;">
+            Show business owners exactly how much revenue this portal reclaims for them every single month.
+          </p>
+
+          <div class="calc-slider-group">
+            <div class="slider-label-row">
+              <span>Monthly Service Appointments:</span>
+              <span id="val-slider-jobs" style="color: var(--primary-light);">35 jobs</span>
+            </div>
+            <input type="range" id="calc-slider-jobs" class="calc-slider" min="10" max="100" value="35" step="5">
+          </div>
+
+          <div class="calc-slider-group">
+            <div class="slider-label-row">
+              <span>Average Job Revenue:</span>
+              <span id="val-slider-price" style="color: var(--accent-cyan);">$250</span>
+            </div>
+            <input type="range" id="calc-slider-price" class="calc-slider" min="50" max="800" value="250" step="25">
+          </div>
+
+          <div class="calc-slider-group">
+            <div class="slider-label-row">
+              <span>Current No-Show / Cancellation Rate:</span>
+              <span id="val-slider-rate" style="color: var(--accent-rose);">15%</span>
+            </div>
+            <input type="range" id="calc-slider-rate" class="calc-slider" min="5" max="30" value="15" step="1">
+          </div>
+
+          <div class="roi-results-card">
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+              Estimated Money Lost to No-Shows / Year:
+            </div>
+            <div id="calc-lost-year" style="font-size: 1.6rem; font-weight: 700; color: var(--accent-rose); font-family: var(--font-heading); margin-bottom: 1rem;">
+              $15,750
+            </div>
+
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+              Annual Revenue Saved by 20% Deposit Portal:
+            </div>
+            <div class="roi-metric-highlight" id="calc-saved-year">
+              $13,388
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.35rem;">
+              That's <strong id="calc-monthly-reclaim" style="color: var(--accent-emerald);">$1,116/mo</strong> back in their pocket. A $750 setup fee pays for itself in less than 30 days!
+            </div>
+          </div>
+        </div>
+
+        <!-- Cold Pitch Scripts & Pricing Formula -->
+        <div class="glass-panel" style="padding: 2.25rem;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">
+            ✉️ Ready-to-Send Cold Outreach Script
+          </h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Copy and personalize this message for Instagram DMs or email to local businesses in your area:
+          </p>
+
+          <div class="script-box" id="script-cold-dm">Hey [Owner Name],
+
+Came across your work on Instagram/Google - really impressive jobs!
+
+Quick question: are you currently taking bookings manually through DM or over the phone?
+
+I built a mobile booking & deposit portal specifically for local service pros that lets your customers choose their package, pick an open date on your schedule, and pay a 20% deposit upfront so they never ghost you.
+
+I put together a working interactive demo you can try on your phone:
+👉 [YOUR_PORTFOLIO_LINK]
+
+Let me know if you'd like me to customize this with your logo and connect it to your payments this week!</div>
+          <button class="copy-btn" data-copy-target="script-cold-dm">Copy Script</button>
+
+          <div style="margin-top: 1.75rem;">
+            <h4 style="font-family: var(--font-heading); font-size: 1.05rem; margin-bottom: 0.5rem;">
+              💡 Recommended Pricing Tiers to Pitch:
+            </h4>
+            <div style="font-size: 0.88rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.5rem;">
+              <div>• <strong>Fast Setup ($499 - $750)</strong>: Custom domain, their logo, their 3 packages, Stripe connected.</div>
+              <div>• <strong>Pro Setup + Care Plan ($299 + $49/mo)</strong>: Lower upfront fee + $49/mo retainer for SMS notifications, hosting, and calendar tweaks.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         VIEW 4: ECC HARNESS & TDD INSPECTOR
+         ==================================================================== -->
+    <section class="view-section" id="view-ecc">
+      <div class="hero-banner" style="margin-bottom: 2.5rem;">
+        <div class="hero-pill" style="background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.4); color: var(--accent-emerald);">
+          🧪 Everything Claude Code (ECC) Harness Verification
+        </div>
+        <h2 class="hero-title" style="font-size: 2.4rem;">Autonomous Quality & Engineering Guardrails</h2>
+        <p class="hero-subtitle">
+          How this project adheres to the ECC framework: automated TDD test runner, AgentShield security verification, and structured engineering modularity.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+        <!-- Harness Overview -->
+        <div class="glass-panel" style="padding: 2.25rem;">
+          <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 1rem;">
+            Installed ECC Modules in this Project
+          </h3>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: var(--accent-cyan); font-weight: bold;">📁 .ecc/rules/</span>
+              <div>
+                <strong>engineering-standards.md</strong>
+                <div style="color: var(--text-dim); font-size: 0.82rem;">Enforces autonomous test-driven validation, input sanitization, and fail-safe design.</div>
+              </div>
+            </li>
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: var(--primary-light); font-weight: bold;">🧠 .ecc/skills/planner</span>
+              <div>
+                <strong>SKILL.md (Autonomous Planner)</strong>
+                <div style="color: var(--text-dim); font-size: 0.82rem;">Deconstructs requirements into schemas, state transitions, and task sequences.</div>
+              </div>
+            </li>
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: var(--accent-emerald); font-weight: bold;">🧪 .ecc/skills/tdd-workflow</span>
+              <div>
+                <strong>SKILL.md (TDD Engine)</strong>
+                <div style="color: var(--text-dim); font-size: 0.82rem;">Mandatory unit tests for deposit math, calendar slot collisions, and regex validators.</div>
+              </div>
+            </li>
+            <li style="display: flex; gap: 0.75rem;">
+              <span style="color: var(--accent-rose); font-weight: bold;">🛡️ .ecc/skills/security-audit</span>
+              <div>
+                <strong>SKILL.md (AgentShield)</strong>
+                <div style="color: var(--text-dim); font-size: 0.82rem;">Scans repository against leaked API keys, tokens, or dangerous script evaluation.</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Live Browser Test Runner -->
+        <div class="glass-panel" style="padding: 2.25rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 style="font-family: var(--font-heading); font-size: 1.3rem;">
+              Live Automated Test Runner
+            </h3>
+            <button class="btn-primary-block" id="btn-run-ecc-tests" style="width: auto; padding: 0.45rem 1rem; font-size: 0.85rem;">
+              ▶ Run ECC Test Suite
+            </button>
+          </div>
+
+          <div style="background: rgba(0,0,0,0.45); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.25rem; font-family: monospace; font-size: 0.84rem; line-height: 1.7; min-height: 220px; white-space: pre-wrap; color: #a7f3d0;" id="ecc-test-results">
+Click "Run ECC Test Suite" to verify business logic and AgentShield security in real time...
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ====================================================================
+       CHECKOUT MODAL (STRIPE EXPERIENCE SIMULATOR)
+       ==================================================================== -->
+  <div class="modal-overlay" id="checkout-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modal-close-checkout" aria-label="Close modal">✕</button>
+
+      <div class="stripe-badge-header">
+        <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700;">
+          Lock In Your Appointment
+        </h3>
+        <div class="stripe-badge">
+          <span>🔒 Secured via</span>
+          <span style="color: #6366f1; font-weight: 800; font-size: 0.9rem;">stripe</span>
+        </div>
+      </div>
+
+      <div class="checkout-summary-box">
+        <div class="summary-row">
+          <span>Service:</span>
+          <strong id="checkout-service-title" style="color: #fff;">Signature Deep Detail</strong>
+        </div>
+        <div class="summary-row">
+          <span>Date & Time:</span>
+          <strong id="checkout-slot-display" style="color: var(--accent-cyan);">2026-10-17 at 10:00 AM</strong>
+        </div>
+        <div class="summary-row total">
+          <span>Total Service Value:</span>
+          <span id="checkout-total-amt">$249.00</span>
+        </div>
+        <div class="summary-row deposit-highlight" style="margin-top: 0.5rem;">
+          <span>20% Deposit Due Today:</span>
+          <span id="checkout-deposit-amt">$49.80</span>
+        </div>
+        <div class="summary-row" style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0;">
+          <span>Balance due upon vehicle completion:</span>
+          <span id="checkout-balance-amt">$199.20</span>
+        </div>
+      </div>
+
+      <!-- Card details -->
+      <div style="margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+          <label class="form-label">Payment Card</label>
+          <button type="button" id="btn-autofill-card" style="background: none; border: none; color: var(--primary-light); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">
+            Autofill Demo Card
+          </button>
+        </div>
+
+        <div class="card-fields-box">
+          <div class="card-number-row">
+            <span>💳</span>
+            <input type="text" id="input-card-num" class="form-input" placeholder="4242 •••• •••• 4242" value="4242 •••• •••• 4242" style="background: transparent; border: none; padding: 0; width: 100%;">
+          </div>
+          <div class="card-sub-row">
+            <input type="text" class="form-input" placeholder="MM / YY" value="12/28" style="background: transparent; border: none; padding: 0;">
+            <input type="text" class="form-input" placeholder="CVC" value="382" style="background: transparent; border: none; padding: 0; text-align: right;">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary-block" id="btn-submit-payment">
+        Pay $49.80 Deposit & Confirm Slot
+      </button>
+
+      <div style="text-align: center; margin-top: 0.85rem; font-size: 0.75rem; color: var(--text-dim);">
+        🛡️ Zero-Risk Deposit. Cancel up to 24 hours prior for a 100% refund.
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>

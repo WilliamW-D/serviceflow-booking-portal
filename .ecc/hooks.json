@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "name": "booking-portal-ecc-harness",
+  "description": "Event hooks for automated code validation, TDD enforcement, and deployment readiness",
+  "hooks": {
+    "post_edit": [
+      {
+        "name": "Syntax & Logic Validation",
+        "action": "run_command",
+        "command": "node -c app.js"
+      }
+    ],
+    "pre_commit": [
+      {
+        "name": "Security & Secret Leak Check",
+        "action": "run_command",
+        "command": "node tests/security-check.js"
+      },
+      {
+        "name": "Unit Tests",
+        "action": "run_command",
+        "command": "node tests/unit-tests.js"
+      }
+    ]
+  }
+}

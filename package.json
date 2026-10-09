@@ -1,0 +1,20 @@
+{
+  "name": "serviceflow-booking-portal",
+  "version": "1.0.0",
+  "description": "High-converting service business booking and deposit collection portal built with ECC automated engineering principles.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/unit-tests.js && node tests/security-check.js",
+    "security": "node tests/security-check.js"
+  },
+  "keywords": [
+    "booking-portal",
+    "deposit-system",
+    "micro-saas",
+    "ecc-harness",
+    "service-business"
+  ],
+  "author": "Billy",
+  "license": "MIT"
+}
