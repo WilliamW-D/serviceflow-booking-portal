@@ -1,5 +1,6 @@
 # ⚡ ServiceFlow — High-Converting Service Business Booking & Deposit Portal
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-10b981.svg)](https://williamw-d.github.io/serviceflow-booking-portal/)
 [![ECC Harness Certified](https://img.shields.io/badge/ECC-Harness%20Certified-6366f1.svg)](#ecc-automated-engineering-harness)
 [![Build Status](https://img.shields.io/badge/Tests-5%2F5%20Passing-10b981.svg)](#test-suite--quality-assurance)
 [![Security Audit](https://img.shields.io/badge/AgentShield-Verified-06b6d4.svg)](#security--agentshield)
